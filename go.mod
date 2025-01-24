@@ -1,3 +1,4 @@
-module github.com/GIT_USER_ID/GIT_REPO_ID
+module github.com/John12356/go-test-sdk
+
 
 go 1.18

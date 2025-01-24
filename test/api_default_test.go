@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"testing"
 
-	securden "github.com/GIT_USER_ID/GIT_REPO_ID"
+	securden "github.com/John12356/go-test-sdk"
 )
 
 func Test_openapi_DefaultAPIService(t *testing.T) {
