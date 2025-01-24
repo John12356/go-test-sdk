@@ -1,0 +1,68 @@
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+
+# Folders
+_obj
+_test
+
+# Architecture specific extensions/prefixes
+*.[568vq]
+[568vq].out
+
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+
+_testmain.go
+
+*.exe
+*.test
+*.prof
+
+# Binaries and build outputs
+*.exe
+*.out
+*.log
+*.bin
+
+# Generated files by OpenAPI Generator (if you don't need to track them)
+.openapi-generator/
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.iml
+
+# Test and coverage results
+*.test
+*.prof
+*.cover
+*.cov
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Go build cache
+*.o
+*.a
+
+# Vendor directory (if using vendored dependencies)
+vendor/
+
+# Git-related files
+!.gitignore
+
+# System files
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Ignore the `VERSION` file if dynamically generated
+VERSION
+

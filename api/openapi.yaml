@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  title: Password Retrieval API
+  version: 1.0.0
+servers:
+- url: "https://{your_api_url}/api"
+paths:
+  /get_password:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: account_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: account_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: account_title
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: account_type
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_get_password_get_200_response'
+          description: Successful response
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Retrieves password information
+components:
+  schemas:
+    _get_password_get_200_response:
+      example:
+        password: password
+      properties:
+        password:
+          type: string
+      type: object
