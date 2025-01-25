@@ -19,7 +19,7 @@ var _ MappedNullable = &GetPasswordGet200Response{}
 
 // GetPasswordGet200Response struct for GetPasswordGet200Response
 type GetPasswordGet200Response struct {
-	Password *string `json:"password,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 // NewGetPasswordGet200Response instantiates a new GetPasswordGet200Response object
@@ -39,40 +39,18 @@ func NewGetPasswordGet200ResponseWithDefaults() *GetPasswordGet200Response {
 	return &this
 }
 
-// GetPassword returns the Password field value if set, zero value otherwise.
+// GetPassword returns the Password field value
 func (o *GetPasswordGet200Response) GetPassword() string {
-	if o == nil || IsNil(o.Password) {
-		var ret string
-		return ret
-	}
-	return *o.Password
+	return o.Password
 }
 
-// GetPasswordOk returns a tuple with the Password field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *GetPasswordGet200Response) GetPasswordOk() (*string, bool) {
-	if o == nil || IsNil(o.Password) {
-		return nil, false
-	}
-	return o.Password, true
-}
-
-// HasPassword returns a boolean if a field has been set.
-func (o *GetPasswordGet200Response) HasPassword() bool {
-	if o != nil && !IsNil(o.Password) {
-		return true
-	}
-
-	return false
-}
-
-// SetPassword gets a reference to the given string and assigns it to the Password field.
+// SetPassword sets the Password field value
 func (o *GetPasswordGet200Response) SetPassword(v string) {
-	o.Password = &v
+	o.Password = v
 }
 
 func (o GetPasswordGet200Response) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -81,7 +59,7 @@ func (o GetPasswordGet200Response) MarshalJSON() ([]byte, error) {
 
 func (o GetPasswordGet200Response) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Password) {
+	if o.Password != "" {
 		toSerialize["password"] = o.Password
 	}
 	return toSerialize, nil
@@ -122,5 +100,3 @@ func (v *NullableGetPasswordGet200Response) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

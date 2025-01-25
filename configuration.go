@@ -12,8 +12,12 @@ package openapi
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"net/http"
+	"net/url"
+	"os"
 	"strings"
 )
 
@@ -74,35 +78,43 @@ type ServerConfigurations []ServerConfiguration
 type Configuration struct {
 	Host             string            `json:"host,omitempty"`
 	Scheme           string            `json:"scheme,omitempty"`
+	BaseUrl          string             `json:"baseUrl,omitempty"`
 	DefaultHeader    map[string]string `json:"defaultHeader,omitempty"`
 	UserAgent        string            `json:"userAgent,omitempty"`
 	Debug            bool              `json:"debug,omitempty"`
+	AuthToken        string            `json:"authtoken,omitempty"`
+	SSLCert           string            `json:"sslCert,omitempty"`
+	InsecureSkipVerify bool             `json:"insecureSkipVerify,omitempty"` 
 	Servers          ServerConfigurations
 	OperationServers map[string]ServerConfigurations
 	HTTPClient       *http.Client
 }
 
-// NewConfiguration returns a new Configuration object
-func NewConfiguration() *Configuration {
+func NewConfiguration(baseURL string) *Configuration {
 	cfg := &Configuration{
-		DefaultHeader:    make(map[string]string),
-		UserAgent:        "OpenAPI-Generator/1.0.0/go",
-		Debug:            false,
-		// Servers:          ServerConfigurations{
-		// 	{
-		// 		URL: "https://{your_api_url}/api",
-		// 		Description: "No description provided",
-		// 	},
-		// },
-		OperationServers: map[string]ServerConfigurations{
+		DefaultHeader: make(map[string]string),
+		UserAgent:     "OpenAPI-Generator/1.0.0/go",
+		Debug:         false,
+		Servers: ServerConfigurations{
+			{
+				URL:         fmt.Sprintf("%s/api", strings.TrimSuffix(baseURL, "/")),
+				Description: "Updated API server URL",
+			},
 		},
+		OperationServers: map[string]ServerConfigurations{},
 	}
+	cfg.BaseUrl = baseURL
 	return cfg
 }
 
 // AddDefaultHeader adds a new HTTP header to the default header in the request
 func (c *Configuration) AddDefaultHeader(key string, value string) {
 	c.DefaultHeader[key] = value
+}
+
+func (c *Configuration) SetAuthToken(token string) {
+	c.AuthToken = token
+	c.DefaultHeader["authtoken"] = token
 }
 
 // URL formats template on a index using given variables
@@ -212,4 +224,80 @@ func (c *Configuration) ServerURLWithContext(ctx context.Context, endpoint strin
 	}
 
 	return sc.URL(index, variables)
+}
+
+func (c *Configuration) SetSSLConfig() error {
+	// If InsecureSkipVerify is true, configure the HTTP client to skip verification
+	if c.InsecureSkipVerify {
+		transport := &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		}
+		c.HTTPClient = &http.Client{Transport: transport}
+		return nil
+	}
+
+	// Parse the BaseURL to extract the host and port
+	parsedURL, err := url.Parse(c.BaseUrl)
+	if err != nil {
+		return fmt.Errorf("invalid BaseURL: %v", err)
+	}
+
+	host := parsedURL.Host
+	if !strings.Contains(host, ":") {
+		// Default to port 443 if no port is specified
+		host = fmt.Sprintf("%s:443", host)
+	}
+
+	// If SSLCert is empty, fetch the certificate from the server
+	if c.SSLCert == "" {
+		// Fetch the certificate from the server
+		conn, err := tls.Dial("tcp", host, &tls.Config{ InsecureSkipVerify: true })
+		if err != nil {
+			return fmt.Errorf("failed to fetch certificate ffrom server: %v", err)
+		}
+		defer conn.Close()
+
+		// Retrieve the peer certificates
+		if len(conn.ConnectionState().PeerCertificates) == 0 {
+			return fmt.Errorf("no certificates found on the server")
+		}
+
+		// Use the first certificate from the server
+		serverCert := conn.ConnectionState().PeerCertificates[0]
+		// Create a certificate pool and add the server certificate
+		certPool := x509.NewCertPool()
+		certPool.AddCert(serverCert)
+
+		// Create the HTTP client with the custom transport
+		transport := &http.Transport{
+			TLSClientConfig: &tls.Config{
+				RootCAs: certPool,
+			},
+		}
+		c.HTTPClient = &http.Client{Transport: transport}
+		return nil
+	}
+
+	// If SSLCert is specified, read the certificate file
+	certFile, err := os.ReadFile(c.SSLCert)
+	if err != nil {
+		return fmt.Errorf("failed to read certificatesss file: %v", err)
+	}
+
+	// Create a certificate pool and append the cert
+	certPool := x509.NewCertPool()
+	if !certPool.AppendCertsFromPEM(certFile) {
+		return fmt.Errorf("failed to add certificate to pool")
+	}
+
+	// Create the HTTP client with custom transport
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			RootCAs: certPool,
+		},
+	}
+	c.HTTPClient = &http.Client{Transport: transport}
+	return nil
 }

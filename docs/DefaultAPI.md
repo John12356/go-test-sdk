@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## GetPasswordGet
 
-> GetPasswordGet200Response GetPasswordGet(ctx).AccountId(accountId).AccountName(accountName).AccountTitle(accountTitle).AccountType(accountType).Execute()
+> GetPasswordGet200Response GetPasswordGet(ctx).AccountId(accountId).AccountName(accountName).AccountTitle(accountTitle).AccountType(accountType).AccountCategory(accountCategory).Execute()
 
 Retrieves password information
 
@@ -31,10 +31,11 @@ func main() {
 	accountName := "accountName_example" // string |  (optional)
 	accountTitle := "accountTitle_example" // string |  (optional)
 	accountType := "accountType_example" // string |  (optional)
+	accountCategory := "accountCategory_example" // string | (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.GetPasswordGet(context.Background()).AccountId(accountId).AccountName(accountName).AccountTitle(accountTitle).AccountType(accountType).Execute()
+	resp, r, err := apiClient.DefaultAPI.GetPasswordGet(context.Background()).AccountId(accountId).AccountName(accountName).AccountTitle(accountTitle).AccountType(accountType).AccountCategory(accountCategory).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetPasswordGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -55,10 +56,11 @@ Other parameters are passed through a pointer to a apiGetPasswordGetRequest stru
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **accountId** | **string** |  | 
+ **accountId** | **int64** |  | 
  **accountName** | **string** |  | 
  **accountTitle** | **string** |  | 
  **accountType** | **string** |  | 
+ **accountCategory** | **int** |  |
 
 ### Return type
 

@@ -29,6 +29,7 @@ type ApiGetPasswordGetRequest struct {
 	accountName *string
 	accountTitle *string
 	accountType *string
+	accountCategory *int
 }
 
 func (r ApiGetPasswordGetRequest) AccountId(accountId int64) ApiGetPasswordGetRequest {
@@ -51,7 +52,12 @@ func (r ApiGetPasswordGetRequest) AccountType(accountType string) ApiGetPassword
 	return r
 }
 
-func (r ApiGetPasswordGetRequest) Execute() (*GetPasswordGet200Response, *http.Response, error) {
+func (r ApiGetPasswordGetRequest) AccountCategory(accountCategory int) ApiGetPasswordGetRequest {
+	r.accountCategory = &accountCategory
+	return r
+}
+
+func (r ApiGetPasswordGetRequest) Execute() (GetPasswordGet200Response, string, error) {
 	return r.ApiService.GetPasswordGetExecute(r)
 }
 
@@ -70,17 +76,17 @@ func (a *DefaultAPIService) GetPasswordGet(ctx context.Context) ApiGetPasswordGe
 
 // Execute executes the request
 //  @return GetPasswordGet200Response
-func (a *DefaultAPIService) GetPasswordGetExecute(r ApiGetPasswordGetRequest) (*GetPasswordGet200Response, *http.Response, error) {
+func (a *DefaultAPIService) GetPasswordGetExecute(r ApiGetPasswordGetRequest) (GetPasswordGet200Response, string, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetPasswordGet200Response
+		localVarReturnValue  GetPasswordGet200Response
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.GetPasswordGet")
 	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, "", &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/get_password"
@@ -101,6 +107,9 @@ func (a *DefaultAPIService) GetPasswordGetExecute(r ApiGetPasswordGetRequest) (*
 	if r.accountType != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "account_type", r.accountType, "form", "")
 	}
+	if r.accountCategory != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "account_category", r.accountCategory, "form", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -120,37 +129,35 @@ func (a *DefaultAPIService) GetPasswordGetExecute(r ApiGetPasswordGetRequest) (*
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
-		return localVarReturnValue, nil, err
+		return localVarReturnValue, "", err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
+		return localVarReturnValue, "", err
 	}
 
 	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
+		return localVarReturnValue, "", err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
+		return localVarReturnValue, string(localVarBody), &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := &GenericOpenAPIError{
+		return localVarReturnValue, "", &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, nil
+	return localVarReturnValue, string(localVarBody), nil
 }
