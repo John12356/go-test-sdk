@@ -41,7 +41,7 @@ func Test_openapi_DefaultAPIService(t *testing.T) {
 	ctx := context.Background()
 
 	// Make the API request
-	resp, httpResp, err := client.DefaultAPI.GetPasswordGet(ctx).
+	resp, httpResp, err := client.DefaultAPI.GetPassword(ctx).
 	// AccountTitle(accountTitle).
 	// AccountCategory(client.WorkAccountType).
 	// AccountType("windows member").
