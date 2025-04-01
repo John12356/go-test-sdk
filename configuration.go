@@ -83,11 +83,11 @@ type Configuration struct {
 func NewConfiguration(baseURL string) *Configuration {
 	cfg := &Configuration{
 		DefaultHeader: make(map[string]string),
-		UserAgent:     "OpenAPI-Generator/1.0.0/go",
+		UserAgent:     "Securden-SDK/1.0.0/go",
 		Debug:         false,
 		Servers: ServerConfigurations{
 			{
-				URL:         fmt.Sprintf("%s/api", strings.TrimSuffix(baseURL, "/")),
+				URL:         fmt.Sprintf("%s/secretsmanagement", strings.TrimSuffix(baseURL, "/")),
 				Description: "Updated API server URL",
 			},
 		},
