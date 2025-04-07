@@ -48,13 +48,13 @@ func (r ApiGetPasswordGetRequest) AccountCategory(accountCategory int) ApiGetPas
 	return r
 }
 
-func (r ApiGetPasswordGetRequest) TicketId(ticketId int) ApiGetPasswordGetRequest {
-	r.accountCategory = &ticketId
+func (r ApiGetPasswordGetRequest) TicketId(ticketId int64) ApiGetPasswordGetRequest {
+	r.ticketId = &ticketId
 	return r
 }
 
-func (r ApiGetPasswordGetRequest) Reason(reason int) ApiGetPasswordGetRequest {
-	r.accountCategory = &reason
+func (r ApiGetPasswordGetRequest) Reason(reason string) ApiGetPasswordGetRequest {
+	r.reason = &reason
 	return r
 }
 
