@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## GetPasswordGet
 
-> GetPasswordGet200Response GetPasswordGet(ctx).AccountId(accountId).AccountName(accountName).AccountTitle(accountTitle).AccountType(accountType).AccountCategory(accountCategory).Execute()
+> GetPasswordGet200Response GetPasswordGet(ctx).AccountId(accountId).AccountName(accountName).AccountTitle(accountTitle).AccountType(accountType).AccountCategory(accountCategory).TicketId(ticketId).Reason(reason).Execute()
 
 Retrieves password information
 
@@ -32,10 +32,11 @@ func main() {
 	accountTitle := "accountTitle_example" // string |  (optional)
 	accountType := "accountType_example" // string |  (optional)
 	accountCategory := "accountCategory_example" // string | (optional)
+	ticketId := "ticketId_example" // string | (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.GetPasswordGet(context.Background()).AccountId(accountId).AccountName(accountName).AccountTitle(accountTitle).AccountType(accountType).AccountCategory(accountCategory).Execute()
+	resp, r, err := apiClient.DefaultAPI.GetPasswordGet(context.Background()).AccountId(accountId).AccountName(accountName).AccountTitle(accountTitle).AccountType(accountType).AccountCategory(accountCategory).TicketId(ticketId).Reason(reason).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.GetPasswordGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -61,6 +62,7 @@ Name | Type | Description  | Notes
  **accountTitle** | **string** |  | 
  **accountType** | **string** |  | 
  **accountCategory** | **int** |  |
+ **ticketId** | **int** |  |
 
 ### Return type
 

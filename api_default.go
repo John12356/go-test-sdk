@@ -19,6 +19,8 @@ type ApiGetPasswordGetRequest struct {
 	accountTitle *string
 	accountType *string
 	accountCategory *int
+	ticketId *int64
+	reason *string
 }
 
 func (r ApiGetPasswordGetRequest) AccountId(accountId int64) ApiGetPasswordGetRequest {
@@ -43,6 +45,16 @@ func (r ApiGetPasswordGetRequest) AccountType(accountType string) ApiGetPassword
 
 func (r ApiGetPasswordGetRequest) AccountCategory(accountCategory int) ApiGetPasswordGetRequest {
 	r.accountCategory = &accountCategory
+	return r
+}
+
+func (r ApiGetPasswordGetRequest) TicketId(ticketId int) ApiGetPasswordGetRequest {
+	r.accountCategory = &ticketId
+	return r
+}
+
+func (r ApiGetPasswordGetRequest) Reason(reason int) ApiGetPasswordGetRequest {
+	r.accountCategory = &reason
 	return r
 }
 
@@ -98,6 +110,12 @@ func (a *DefaultAPIService) GetPasswordGetExecute(r ApiGetPasswordGetRequest) (G
 	}
 	if r.accountCategory != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "account_category", r.accountCategory, "form", "")
+	}
+	if r.ticketId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "ticket_id", r.ticketId, "form", "")
+	}
+	if r.reason != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "reason", r.reason, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
