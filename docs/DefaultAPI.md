@@ -33,6 +33,7 @@ func main() {
 	accountType := "accountType_example" // string |  (optional)
 	accountCategory := "accountCategory_example" // string | (optional)
 	ticketId := "ticketId_example" // string | (optional)
+	reason := "reason_example" // string | (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -62,7 +63,8 @@ Name | Type | Description  | Notes
  **accountTitle** | **string** |  | 
  **accountType** | **string** |  | 
  **accountCategory** | **int** |  |
- **ticketId** | **int** |  |
+ **reason** | **string** |  |
+ **ticketId** | **string** |  |
 
 ### Return type
 

@@ -19,7 +19,7 @@ type ApiGetPasswordGetRequest struct {
 	accountTitle *string
 	accountType *string
 	accountCategory *int
-	ticketId *int64
+	ticketId *string
 	reason *string
 }
 
@@ -48,7 +48,7 @@ func (r ApiGetPasswordGetRequest) AccountCategory(accountCategory int) ApiGetPas
 	return r
 }
 
-func (r ApiGetPasswordGetRequest) TicketId(ticketId int64) ApiGetPasswordGetRequest {
+func (r ApiGetPasswordGetRequest) TicketId(ticketId string) ApiGetPasswordGetRequest {
 	r.ticketId = &ticketId
 	return r
 }
