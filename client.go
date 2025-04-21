@@ -41,7 +41,6 @@ type APIClient struct {
 	DefaultAPI *DefaultAPIService
 	WorkAccountType int
 	PersonalAccountType int
-	GlobalPersonalAccountType int
 }
 
 type service struct {
@@ -58,8 +57,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c := &APIClient{
 		cfg:          cfg,
 		WorkAccountType: 1,
-		PersonalAccountType: 2,
-		GlobalPersonalAccountType: 3,
+		PersonalAccountType: 3,
 	}
 	c.cfg = cfg
 	c.common.client = c
